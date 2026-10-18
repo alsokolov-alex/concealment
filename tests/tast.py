@@ -1,0 +1,1 @@
+from tests import flake8 src/widget.py, mypy src/widget.py, black src/widget.py, isort src/widget.py
