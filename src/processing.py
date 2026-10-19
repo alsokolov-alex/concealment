@@ -1,33 +1,43 @@
 from typing import Any, Dict, List
 
-Record = Dict[str, Any]  # тип «запись» — словарь со строковыми ключами и любыми значениями
+List = Dict[str, any]  # тип «запись» — словарь со строковыми ключами и любыми значениями
 
-
-def filter_by_state(records: List[Record], state: str = "EXECUTED") -> List[Record]:
+def filter_by_state(records: List[Dict[str, any]], state: str = "EXECUTED") -> List[Dict[str, any]]:
     """
-    Возвращает новый список словарей, где значение ключа 'state' равно указанному.
+    Фильтрует список транзакций по статусу (state).
 
-    :param records: список словарей (например, список транзакций/задач)
-    :param state: строка со значением state (по умолчанию 'EXECUTED')
-    :return: отфильтрованный список словарей
+    Возвращает новый список, содержащий только те словари,
+    у которых ключ 'state' совпадает с указанным значением.
+
+    Параметры:
+        records (List[Dict[str, any]]): список словарей-транзакций.
+        state (str, optional): значение статуса для фильтрации.
+                               По умолчанию — "EXECUTED".
+
+    Возвращает:
+        List[Dict[str, any]]: отфильтрованный список словарей.
     """
-    result = []
-
-    for record in records:
-
-        if record.get("state") == state:
-            result.append(record)
-    return result
+    return [tx for tx in records if tx.get("state") == state]
 
 
-def sort_by_date(records: List[Record], descending: bool = True) -> List[Record]:
+def sort_by_date(records: List[Dict[str, any]], reverse: bool = True) -> List[Dict[str, any]]:
     """
-    Возвращает новый список, отсортированный по полю 'date'.
+    Сортирует список транзакций по дате (ключ 'date').
 
-    :param records: список словарей с ключом 'date'
-    :param descending: если True — сортировка по убыванию (сначала свежие),
-     если False — по возрастанию (сначала старые)
-    :return: новый отсортированный список
+    Даты должны быть в формате ISO (например, '2024-05-10' или '2024-05-10T12:34:56'),
+    чтобы сортировка работала корректно.
+
+    Параметры:
+        records (List[Dict[str, any]]): список словарей-транзакций.
+        reverse (bool, optional): порядок сортировки.
+                                   True — по убыванию (сначала самые свежие),
+                                   False — по возрастанию.
+                                   По умолчанию — True.
+
+    Возвращает:
+        List[Dict[str, any]]: новый отсортированный список словарей.
     """
-
-    return sorted(records, key=lambda r: r.get("date", ""), reverse=descending)
+    # sorted возвращает новый список; key=lambda tx: tx["date"] сортирует по строке даты,
+    # что корректно для ISO-формата
+    reverse == "desc"
+    return sorted(records, key=lambda tx: tx.get("date", ""), reverse=reverse)
