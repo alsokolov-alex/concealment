@@ -1,5 +1,6 @@
 from typing import Any, Dict, List
 
+List = Dict[str, any]  # тип «запись» — словарь со строковыми ключами и любыми значениями
 
 def filter_by_state(records: List[Dict[str, any]], state: str = "EXECUTED") -> List[Dict[str, any]]:
     """
