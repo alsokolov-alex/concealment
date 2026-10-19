@@ -14,15 +14,15 @@ data = [
 executed_only = filter_by_state(data, 'EXECUTED')
 
 # Сортировка по убыванию (по умолчанию)
-sorted_by_date_desc = sort_by_date(data)
+#sorted_by_date_desc = sort_by_date(data)
 
 # Сортировка по возрастанию
-sorted_by_date_asc = sort_by_date(data, descending=False)
+#sorted_by_date_asc = sort_by_date(data, descending=False)
 
 # Комбинация: сначала фильтр, потом сортировка
 filtered_and_sorted = sort_by_date(filter_by_state(data, 'EXECUTED'))
 
-executed_only = filter_by_state(data)
+#executed_only = filter_by_state(data)
 print("Только EXECUTED:")
 for item in executed_only:
     print(item)
