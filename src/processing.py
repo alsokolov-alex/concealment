@@ -26,9 +26,10 @@ def sort_by_date(records: List[Record], descending: bool = True) -> List[Record]
     Если даты нет или она пустая, такие записи идут в конец при убывании,
     и в начало при возрастании.
     """
+
     def sort_key(r: Record) -> str:
         # Если даты нет или пустая — возвращаем пустую строку.
         # При descending=True пустые будут в конце, при False — в начале.
-        return r.get('date', '') or ''
+        return r.get("date", "") or ""
 
     return sorted(records, key=sort_key, reverse=descending)
