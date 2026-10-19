@@ -1,1 +1,1 @@
-from tests import flake8 src/widget.py, mypy src/widget.py, black src/widget.py, isort src/widget.py
+from tests import flake8 src/processing.py, mypy src/processing.py, black src/processing.py, isort src/processing.py
