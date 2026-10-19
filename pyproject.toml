@@ -2,7 +2,7 @@
 name = "pythonproject-masks"
 version = "0.1.0"
 description = ""
-authors = ["Your Name <you@example.com>"]
+authors = ["Aleksandr Sokolov <alsokolov@xmail.ru>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
@@ -15,19 +15,15 @@ build-backend = "poetry.core.masonry.api"
 [dependency-groups]
 lint = [
     "flake8 (>=7.4.1,<8.0.0)",
-    "mypy (>=2.4.0,<3.0.0)",
-    "black (>=26.5.1,<27.0.0)",
-    "isort (>=9.0.2,<10.0.0)"
+    "black (>=26.10.1,<27.0.0)",
+    "isort (>=9.0.2,<10.0.0)",
+    "mypy (>=2.4.0,<3.0.0)"
 ]
 
-[tool.mypy]
-disallow_untyped_defs = true
-no_implicit_optional = true
-warn_return_any = true
-exclude = '.venv'
-
 [tool.black]
+# Максимальная длина строки
 line-length = 119
+# Файлы, которые не нужно форматировать
 exclude = '''
 (
   /(
