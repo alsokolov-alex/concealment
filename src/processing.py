@@ -22,12 +22,13 @@ def filter_by_state(records: List[Record], state: str = "EXECUTED") -> List[Reco
 
 def sort_by_date(records: List[Record], descending: bool = True) -> List[Record]:
     """
-    Возвращает новый список, отсортированный по полю 'date'.
-
-    :param records: список словарей с ключом 'date'
-    :param descending: если True — сортировка по убыванию (сначала свежие),
-     если False — по возрастанию (сначала старые)
-    :return: новый отсортированный список
+    Сортирует по полю 'date' в формате ISO (YYYY-MM-DD...).
+    Если даты нет или она пустая, такие записи идут в конец при убывании,
+    и в начало при возрастании.
     """
+    def sort_key(r: Record) -> str:
+        # Если даты нет или пустая — возвращаем пустую строку.
+        # При descending=True пустые будут в конце, при False — в начале.
+        return r.get('date', '') or ''
 
-    return sorted(records, key=lambda r: r.get("date", ""), reverse=descending)
+    return sorted(records, key=sort_key, reverse=descending)
