@@ -1,7 +1,7 @@
 from typing import Any, Dict, List
 
 
-data_list = dict[str, any]  # тип «запись» — словарь со строковыми ключами и любыми значениями
+data_list = dict[str, Any]  # тип «запись» — словарь со строковыми ключами и любыми значениями
 
 
 def filter_by_state(records: list[data_list], state: str = "EXECUTED") -> list[data_list]:
