@@ -1,12 +1,12 @@
+from typing import Any, Dict, List
+
 def get_mask_card_number(card_number: str) -> str:
     """Работаем со строкой, оформляем 16 цифр для работы"""
 
-    card_number = str(card_number)
+    cleaned = str(card_number).replace(" ", "").replace("-", "")
 
-    card_number = card_number.replace(" ", "").replace("-", "")
-
-    if len(card_number) != 16:
-        raise ValueError
+    if len(cleaned) != 16:
+        raise ValueError("Номер карты должен содержать ровно 16 символов")
 
     first_part = card_number[:6]
 
@@ -39,6 +39,6 @@ def get_mask_account(account_number: str) -> str:
 
     last_four = account_number[-4:]
 
-    masked_account = "**" + last_four
+    masked_account = "**" + " " + last_four
 
     return masked_account

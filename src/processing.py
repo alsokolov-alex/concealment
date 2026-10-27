@@ -1,6 +1,7 @@
 from typing import Any, Dict, List
 
-data_list = dict[str, any]  # тип «запись» — словарь со строковыми ключами и любыми значениями
+
+data_list = dict[str, Any]  # тип «запись» — словарь со строковыми ключами и любыми значениями
 
 
 def filter_by_state(records: list[data_list], state: str = "EXECUTED") -> list[data_list]:
@@ -40,5 +41,5 @@ def sort_by_date(records: list[data_list], reverse: bool = True) -> list[data_li
     """
     # sorted возвращает новый список; key=lambda tx: tx["date"] сортирует по строке даты,
     # что корректно для ISO-формата
-    reverse == "desc"
+    # reverse == "desc"
     return sorted(records, key=lambda tx: tx.get("date", ""), reverse=reverse)
