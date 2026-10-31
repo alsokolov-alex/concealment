@@ -1,4 +1,9 @@
-def filter_by_currency(transactions, currency):
+from typing import Any, Dict, Iterable, Iterator, List
+
+Transaction = Dict[str, Any]
+
+
+def filter_by_currency(transactions: Iterable[Transaction], currency: str) -> Iterator[Transaction]:
     """
     Возвращает генератор, который поочерёдно выдаёт транзакции,
     где код валюты совпадает с заданной (например, 'USD').
@@ -12,17 +17,12 @@ def filter_by_currency(transactions, currency):
     """
     for transaction in transactions:
         # Безопасный доступ через .get, чтобы не упасть, если поля нет
-        tx_currency = (
-            transaction
-            .get("operationAmount", {})
-            .get("currency", {})
-            .get("code")
-        )
+        tx_currency = transaction.get("operationAmount", {}).get("currency", {}).get("code")
         if tx_currency == currency:
             yield transaction
 
 
-def transaction_descriptions(transactions):
+def transaction_descriptions(transactions: Iterable[Transaction]) -> Iterator[str]:
     """
     Генератор, который поочерёдно выдаёт описание каждой операции.
 
@@ -32,7 +32,8 @@ def transaction_descriptions(transactions):
     for transaction in transactions:
         yield transaction.get("description", "")
 
-def card_number_generator(start, end):
+
+def card_number_generator(start: int, end: int) -> Iterator[str]:
     """
     Генератор номеров банковских карт в формате XXXX XXXX XXXX XXXX.
 
