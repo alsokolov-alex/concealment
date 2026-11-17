@@ -1,44 +1,58 @@
+"""Модуль с функциями маскировки данных банковских карт и счетов."""
+import logging
+import os
+import re
+from typing import Any
+
+logger = logging.getLogger("masks")
+logger.setLevel(logging.DEBUG)
+
+os.makedirs("logs", exist_ok=True)
+file_handler = logging.FileHandler("logs/masks.log", mode="w", encoding="utf-8")
+file_formatter = logging.Formatter(
+    "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
+file_handler.setFormatter(file_formatter)
+logger.addHandler(file_handler)
+
+
 def get_mask_card_number(card_number: str) -> str:
-    """Работаем со строкой, оформляем 16 цифр для работы"""
+    """Маскирует номер карты: показывает первые 6 и последние 4 цифры.
 
-    card_number = str(card_number)
+    Args:
+        card_number: Номер карты в виде строки из цифр.
 
-    card_number = card_number.replace(" ", "").replace("-", "")
+    Returns:
+        Строка замаскированного номера вида 'XXXX XX** **** XXXX'.
 
-    if len(card_number) != 16:
-        raise ValueError
+    Raises:
+        ValueError: Если номер карты пуст или не состоит из цифр.
+    """
+    if not card_number or not card_number.isdigit():
+        logger.error("Некорректный номер карты: %r", card_number)
+        raise ValueError("Номер карты должен содержать только цифры")
 
-    first_part = card_number[:6]
-
-    last_part = card_number[-4:]
-
-    middle_part = card_number[6:-4]
-
-    masked_middle = "*" * len(middle_part)
-
-    raw_masked = first_part + masked_middle + last_part
-
-    blocks = []
-    for i in range(0, len(raw_masked), 4):
-        block = raw_masked[i : i + 4]
-        blocks.append(block)
-
-    result = " ".join(blocks)
-    return result
+    masked = f"{card_number[:4]} {card_number[4:6]}** **** {card_number[-4:]}"
+    logger.info("Номер карты успешно замаскирован")
+    return masked
 
 
 def get_mask_account(account_number: str) -> str:
-    """Работаем со строкой,собираем звёздочки + последние 4 цифры"""
+    """Маскирует номер счёта: показывает только последние 4 цифры.
 
-    account_number = str(account_number)
+    Args:
+        account_number: Номер счёта в виде строки из цифр.
 
-    account_number = account_number.replace(" ", "").replace("-", "")
+    Returns:
+        Строка замаскированного номера вида '**XXXX'.
 
-    if len(account_number) < 4:
-        raise ValueError
+    Raises:
+        ValueError: Если номер счёта короче 4 цифр или не состоит из цифр.
+    """
+    if not account_number or not account_number.isdigit() or len(account_number) < 4:
+        logger.error("Некорректный номер счёта: %r", account_number)
+        raise ValueError("Номер счёта должен содержать минимум 4 цифры")
 
-    last_four = account_number[-4:]
-
-    masked_account = "**" + last_four
-
-    return masked_account
+    masked = f"**{account_number[-4:]}"
+    logger.info("Номер счёта успешно замаскирован")
+    return masked
