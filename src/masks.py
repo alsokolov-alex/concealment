@@ -1,17 +1,14 @@
 """Модуль с функциями маскировки данных банковских карт и счетов."""
+
 import logging
 import os
-import re
-from typing import Any
 
 logger = logging.getLogger("masks")
 logger.setLevel(logging.DEBUG)
 
 os.makedirs("logs", exist_ok=True)
 file_handler = logging.FileHandler("logs/masks.log", mode="w", encoding="utf-8")
-file_formatter = logging.Formatter(
-    "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+file_formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 file_handler.setFormatter(file_formatter)
 logger.addHandler(file_handler)
 
