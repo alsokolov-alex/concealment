@@ -8,9 +8,9 @@ from typing import Any, List
 
 import pandas as pd
 
-file_path = "./data/operations.json"
-file_path = "./data/transactions.csv"
-file_path = "./data/transactions_excel.xlsx"
+PATH_TO_FILE = "./data/operations.json"
+PATH_TO_FILE = "./data/transactions.csv"
+PATH_TO_FILE = "./data/transactions_excel.xlsx"
 
 
 logger = logging.getLogger("utils")
@@ -23,7 +23,7 @@ file_handler.setFormatter(file_formatter)
 logger.addHandler(file_handler)
 
 
-def get_transactions_from_json(file_path: str) -> List[dict]:
+def get_transactions_from_json(PATH_TO_FILE: str) -> List[dict]:
     """Читает JSON-файл и возвращает список словарей с данными о финансовых транзакциях.
 
     Args:
@@ -33,44 +33,44 @@ def get_transactions_from_json(file_path: str) -> List[dict]:
         Список словарей с данными о транзакциях.
         Пустой список, если файл не найден, пустой или содержит не список.
     """
-    logger.debug("Попытка чтения файла: %s", file_path)
+    logger.debug("Попытка чтения файла: %s", PATH_TO_FILE)
     try:
-        with open(file_path, encoding="utf-8") as file:
+        with open(PATH_TO_FILE, encoding="utf-8") as file:
             data: Any = json.load(file)
     except FileNotFoundError:
-        logger.error("Файл не найден: %s", file_path)
+        logger.error("Файл не найден: %s", PATH_TO_FILE)
         return []
     except json.JSONDecodeError:
-        logger.error("Некорректный JSON в файле: %s", file_path)
+        logger.error("Некорректный JSON в файле: %s", PATH_TO_FILE)
         return []
 
     if isinstance(data, list):
-        logger.info("Прочитано %d транзакций из файла %s", len(data), file_path)
+        logger.info("Прочитано %d транзакций из файла %s", len(data), PATH_TO_FILE)
         return data
 
-    logger.error("Содержимое файла %s не является списком", file_path)
+    logger.error("Содержимое файла %s не является списком", PATH_TO_FILE)
     return []
 
 
-def get_transactions_from_csv(file_path: str) -> list[dict]:
+def get_transactions_from_csv(PATH_TO_FILE: str) -> list[dict]:
     """Считывает финансовые операции из CSV-файла и возвращает список словарей."""
     transactions = []
     try:
-        with open(file_path, encoding="utf-8") as file:
+        with open(PATH_TO_FILE, encoding="utf-8") as file:
             reader = csv.DictReader(file, delimiter=";")
             for row in reader:
                 transactions.append(dict(row))
     except FileNotFoundError:
-        print(f"Файл {file_path} не найден")
+        print(f"Файл {PATH_TO_FILE} не найден")
     return transactions
 
 
-def get_transactions_from_excel(file_path: str) -> list[dict]:
+def get_transactions_from_excel(PATH_TO_FILE: str) -> list[dict]:
     """Считывает финансовые операции из XLSX-файла и возвращает список словарей."""
     try:
-        df = pd.read_excel(file_path)
+        df = pd.read_excel(PATH_TO_FILE)
         transactions = df.fillna("").to_dict(orient="records")
     except FileNotFoundError:
-        print(f"Файл {file_path} не найден")
+        print(f"Файл {PATH_TO_FILE} не найден")
         transactions = []
     return transactions
