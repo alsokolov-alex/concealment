@@ -8,6 +8,7 @@ from src.utils import (
     get_transactions_from_csv,
     get_transactions_from_excel,
     get_transactions_from_json,
+    mask_number,
 )
 
 FILES_BY_MENU = {
@@ -58,25 +59,37 @@ def ask_status() -> str:
 def format_transaction(transaction: dict) -> str:
     """Форматирует одну транзакцию для вывода в консоль."""
     date_raw = transaction.get("date", "")
-    date = date_raw[:10].replace("-", ".") if date_raw else "—"
+    if date_raw and date_raw[4] == "-":
+        year, month, day = date_raw[:10].split("-")
+        date = f"{day}.{month}.{year}"
+    else:
+        date = date_raw[:10] if date_raw else "—"
 
-    description = transaction.get("description", "Нет описания")
-    if not description:
-        description = "Нет описания"
+    description = transaction.get("description", "Нет описания") or "Нет описания"
 
-    # Сумма и валюта: вложенный формат (JSON) или плоский (CSV/XLSX)
-    nested = transaction.get("operationAmount", {})
+    nested = transaction.get("operationAmount") or {}
     amount = nested.get("amount", transaction.get("amount", "0"))
-    currency = nested.get("currency", {}).get("code", transaction.get("currency_code", ""))
+    currency = nested.get("currency", {})
+    code = currency.get("code", transaction.get("currency_code", ""))
+    if isinstance(amount, float) and amount == int(amount):
+        amount = int(amount)
+    currency_out = "руб." if str(code).upper() == "RUB" else code
 
-    from_info = transaction.get("from") or ""
-    to_info = transaction.get("to") or ""
-    route = f"{from_info} -> {to_info}" if to_info else from_info
+    # Новое: маскируем номера карт и счетов перед выводом
+    from_info = mask_number(transaction.get("from") or "")
+    to_info = mask_number(transaction.get("to") or "")
+    3
+
+    # Стрелка только если есть и отправитель, и получатель
+    if from_info and to_info:
+        route = f"{from_info} -> {to_info}"
+    else:
+        route = from_info or to_info
 
     lines = [f"{date} {description}"]
     if route:
         lines.append(route)
-    lines.append(f"Сумма: {amount} {currency}")
+    lines.append(f"Сумма: {amount} {currency_out}")
     return "\n".join(lines)
 
 
