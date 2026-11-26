@@ -79,7 +79,6 @@ def format_transaction(transaction: dict) -> str:
     from_info = mask_number(transaction.get("from") or "")
     to_info = mask_number(transaction.get("to") or "")
     3
-
     # Стрелка только если есть и отправитель, и получатель
     if from_info and to_info:
         route = f"{from_info} -> {to_info}"
