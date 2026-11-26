@@ -107,11 +107,9 @@ def mask_number(value: str) -> str:
     digits = re.sub(r"\D", "", value)
     if not digits:
         return value
-
     # Счёт: показываем только последние 4 цифры
     if value.lower().startswith(("счет", "счёт", "account")):
         return f"Счет **{digits[-4:]}"
-
     # Карта: первые 6 и последние 4 цифры
     parts = value.rsplit(" ", 1)
     name = parts[0] if len(parts) == 2 and not parts[0][-1].isdigit() else ""
